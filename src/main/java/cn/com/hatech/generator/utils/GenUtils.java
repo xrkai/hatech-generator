@@ -1,5 +1,6 @@
 package cn.com.hatech.generator.utils;
 
+import cn.com.hatech.generator.entity.ConfigEntity;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -45,7 +46,7 @@ public class GenUtils {
     /**
      * 生成代码
      */
-    public static void generatorCode(Map<String, String> table, List<Map<String, String>> columns, ZipOutputStream zip) throws UnsupportedEncodingException {
+    public static void generatorCode(Map<String, String> table, List<Map<String, String>> columns, ConfigEntity configEntity, ZipOutputStream zip) throws UnsupportedEncodingException {
         //配置信息
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
@@ -54,7 +55,7 @@ public class GenUtils {
         tableEntity.setTableName(table.get("tableName"));
         tableEntity.setComments(table.get("tableComment"));
         //表名转换成Java类名
-        String className = tableToJava(tableEntity.getTableName(), config.getString("tablePrefix"));
+        String className = tableToJava(tableEntity.getTableName(), configEntity.getTablePrefix());
         tableEntity.setClassName(className);
         tableEntity.setClassname(StringUtils.uncapitalize(className));
         //列信息
@@ -95,7 +96,7 @@ public class GenUtils {
         Properties prop = new Properties();
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
-        String mainPath = config.getString("mainPath");
+        String mainPath = configEntity.getPackageName();
         mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
         //封装模板数据
         Map<String, Object> map = new HashMap<String, Object>();
@@ -106,11 +107,11 @@ public class GenUtils {
         map.put("classname", tableEntity.getClassname());
         map.put("pathName", tableEntity.getClassname().toLowerCase());
         List<ColumnEntity> columnsList = tableEntity.getColumns();
-        for (ColumnEntity ColumnEntity : columnsList){
+        for (ColumnEntity ColumnEntity : columnsList) {
             String DataType = ColumnEntity.getDataType();
-            if("datetime".equals(DataType)){
+            if ("datetime".equals(DataType)) {
                 DataType = "TIMESTAMP";
-            }else if ("int".equals(DataType)){
+            } else if ("int".equals(DataType)) {
                 DataType = "INTEGER";
             }
             ColumnEntity.setDataType(DataType.toUpperCase());
@@ -118,12 +119,12 @@ public class GenUtils {
         map.put("columns", columnsList);
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
-        map.put("package", config.getString("package"));
-        map.put("moduleName", config.getString("moduleName"));
-        map.put("author", config.getString("author"));
-        map.put("email", config.getString("email"));
-        String moduleChineseName = config.getString("moduleChineseName");
-        map.put("moduleChineseName",new String(moduleChineseName.getBytes("ISO-8859-1"),"gbk"));
+        map.put("package", configEntity.getPackageName());
+        map.put("moduleName", configEntity.getModuleName());
+        map.put("author", configEntity.getAuthor());
+        map.put("email", configEntity.getEmail());
+        String moduleChineseName = configEntity.getModuleChineseName();
+        map.put("moduleChineseName", moduleChineseName);
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
         VelocityContext context = new VelocityContext(map);
 
@@ -137,7 +138,7 @@ public class GenUtils {
 
             try {
                 //添加到zip
-                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"), config.getString("moduleName"))));
+                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), configEntity.getPackageName(), configEntity.getModuleName())));
                 IOUtils.write(sw.toString(), zip, "UTF-8");
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
@@ -190,11 +191,11 @@ public class GenUtils {
         }
 
         if (template.contains("Mapper.java.vm")) {
-            return packagePath + "mapper" + File.separator +"I"+ className + "Mapper.java";
+            return packagePath + "mapper" + File.separator + "I" + className + "Mapper.java";
         }
 
         if (template.contains("Service.java.vm")) {
-            return packagePath + "service" + File.separator + "I"+ className + "Service.java";
+            return packagePath + "service" + File.separator + "I" + className + "Service.java";
         }
 
         if (template.contains("ServiceImpl.java.vm")) {

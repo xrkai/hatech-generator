@@ -8,12 +8,11 @@
 
 package cn.com.hatech.generator.controller;
 
+import cn.com.hatech.generator.entity.ConfigEntity;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import cn.com.hatech.generator.service.SysGeneratorService;
 import cn.com.hatech.generator.utils.PageUtils;
@@ -49,15 +48,13 @@ public class SysGeneratorController {
 	/**
 	 * 生成代码
 	 */
-	@RequestMapping("/code")
-	public void code(String tables, HttpServletResponse response) throws IOException{
-		byte[] data = sysGeneratorService.generatorCode(tables.split(","));
-		
+	@PostMapping("/code")
+	public void code(@RequestBody ConfigEntity configEntity, HttpServletResponse response) throws IOException{
+		byte[] data = sysGeneratorService.generatorCode(configEntity);
 		response.reset();  
         response.setHeader("Content-Disposition", "attachment; filename=\"hatech-code.zip\"");
         response.addHeader("Content-Length", "" + data.length);  
         response.setContentType("application/octet-stream; charset=UTF-8");  
-  
-        IOUtils.write(data, response.getOutputStream());  
+        IOUtils.write(data,response.getOutputStream());
 	}
 }
