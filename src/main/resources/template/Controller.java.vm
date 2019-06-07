@@ -4,7 +4,7 @@ import ${package}.${moduleName}.entity.${className};
 import ${package}.${moduleName}.service.I${className}Service;
 import cn.com.hatech.common.data.result.ResultObject;
 import cn.com.hatech.common.data.result.ResultResponse;
-import cn.com.hatech.app.dr.config.log.OptionLog;
+import  ${package}.config.log.OptionLog;
 import cn.com.hatech.common.util.log.OptionType;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
