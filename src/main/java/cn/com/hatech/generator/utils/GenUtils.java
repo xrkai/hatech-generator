@@ -95,8 +95,6 @@ public class GenUtils {
         Properties prop = new Properties();
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
-        String mainPath = configEntity.getPackageName();
-        mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
         //封装模板数据
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("tableName", tableEntity.getTableName());
@@ -117,7 +115,6 @@ public class GenUtils {
         }
         map.put("columns", columnsList);
         map.put("hasBigDecimal", hasBigDecimal);
-        map.put("mainPath", mainPath);
         map.put("package", configEntity.getPackageName());
         map.put("moduleName", configEntity.getModuleName());
         map.put("author", configEntity.getAuthor());
