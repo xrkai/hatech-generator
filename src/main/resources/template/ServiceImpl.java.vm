@@ -1,0 +1,101 @@
+package ${package}.${moduleName}.service.impl;
+
+import  ${package}.${moduleName}.entity.${className};
+import  ${package}.${moduleName}.mapper.I${className}Mapper;
+import  ${package}.${moduleName}.service.I${className}Service;
+import cn.com.hatech.common.data.page.MybatisPage;
+import cn.com.hatech.common.data.universal.AbstractService;
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Copyright (C), 2018,北京同创永益科技发展有限公司
+ * @ProjectName: hatech
+ * @Package:  ${package}.${moduleName}.service.impl
+ * @ClassName: ${className}ServiceImpl
+ * @Author: ${author}
+ * @Description: ${moduleChineseName}业务接口实现
+ * @Date: ${datetime}
+ * @Version: 1.0
+ */
+@Service("${classname}Service")
+@Slf4j
+public class ${className}ServiceImpl extends AbstractService<${className}> implements I${className}Service {
+
+    /**
+    * ${moduleChineseName}数据层实现接口
+    */
+    @Autowired
+    private I${className}Mapper ${classname}Mapper;
+
+    /**
+     * 分页查询${moduleChineseName}列表信息
+     *
+     * @param map
+     * @return
+     */
+    @Override
+    public PageInfo<${className}> findAll(Map<String, Object> map) {
+        MybatisPage.getPageSize(map);
+        PageHelper.startPage(MybatisPage.page, MybatisPage.limit);
+        List<${className}> ${classname}InfoList = this.${classname}Mapper.findAll(map);
+        log.info("{}", ${classname}InfoList);
+        return new PageInfo<>(${classname}InfoList);
+    }
+
+    /**
+     * 根据map信息新增或修改${moduleChineseName}
+     *
+     * @param map
+     * @return
+     */
+    @Override
+    public int edit(Map<String, Object> map) {
+        ${className} ${classname} = JSON.parseObject(JSON.toJSONString(map), ${className}.class);
+        // 判断id是否存在，如果不存在 则添加，否则修改
+        if (StringUtils.isEmpty(map.get("id"))) {
+            return this.add${className}(${classname});
+        } else {
+            return this.update${className}(${classname});
+        }
+    }
+
+    /**
+     * 根据id批量删除${moduleChineseName}信息
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public int delete(String ids) {
+        return this.${classname}Mapper.deleteByIds(ids);
+    }
+
+    /**
+     * 新增${moduleChineseName}
+     *
+     * @param ${classname}
+     * @return
+     */
+    private int add${className}(${className} ${classname}) {
+        return this.${classname}Mapper.insert(${classname});
+    }
+
+    /**
+     * 修改${moduleChineseName}
+     *
+     * @param ${classname}
+     * @return
+     */
+    private int update${className}(${className} ${classname}) {
+        return this.${classname}Mapper.updateByPrimaryKey(${classname});
+    }
+
+}

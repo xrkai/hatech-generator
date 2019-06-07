@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${package}.${moduleName}.mapper.I${className}Mapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap id="${className}Map" type="${package}.${moduleName}.entity.${className}" >
+        #foreach($column in $columns)
+            <result column="${column.columnName}" jdbcType="${column.dataType}" property="${column.attrname}" />
+        #end
+</resultMap>
+
+    <!-- 查询所有信息 -->
+    <select id="findAll"  resultMap="${className}Map">
+        select
+    #foreach($column in $columns)
+      ${column.columnName}#if($velocityCount != $columns.size()),
+#end
+    #end
+    from ${tableName}
+    where 1=1
+        <if test="id != null and id != ''">and id = #{id}</if>
+        <choose>
+            <when test="sortName !=null and sortName!='id'">
+                ORDER BY ${sortName} ${sortOrder}
+            </when >
+            <otherwise>
+                ORDER BY create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

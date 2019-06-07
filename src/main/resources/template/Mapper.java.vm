@@ -1,0 +1,29 @@
+package ${package}.${moduleName}.mapper;
+
+import ${package}.${moduleName}.entity.${className};
+import cn.com.hatech.common.data.universal.IBaseMapper;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Copyright (C), 2018,北京同创永益科技发展有限公司
+ * @ProjectName: hatech
+ * @Package:  ${package}.${moduleName}.mapper
+ * @ClassName: I${className}Mapper
+ * @Author: ${author}
+ * @Description: ${moduleChineseName}数据访问接口
+ * @Date: ${datetime}
+ * @Version: 1.0
+ */
+@Repository("${classname}Mapper")
+public interface I${className}Mapper extends IBaseMapper<${className}> {
+
+    /**
+     * 查询${moduleChineseName}信息
+     * @param map
+     * @return
+     */
+    List<${className}> findAll(Map<String, Object> map);
+
+}
