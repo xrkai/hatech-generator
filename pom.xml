@@ -29,6 +29,7 @@
 		<mysql.version>5.1.38</mysql.version>
 		<mssql.version>4.0</mssql.version>
 		<oracle.version>11.2.0.3</oracle.version>
+		<lombok.version>1.18.8</lombok.version>
 	</properties>
 
 	<dependencies>
@@ -107,13 +108,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
+            <version>${lombok.version}</version>
         </dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.8</version>
-		</dependency>
 	</dependencies>
 
 	<build>
