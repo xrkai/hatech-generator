@@ -66,12 +66,11 @@ public class GenUtils {
             columnEntity.setDataType(column.get("dataType"));
             columnEntity.setComments(column.get("columnComment"));
             columnEntity.setExtra(column.get("extra"));
-
+            columnEntity.setColumnLength(getColumnLength(column.get("columnLength")));
             //列名转换成Java属性名
             String attrName = columnToJava(columnEntity.getColumnName());
             columnEntity.setAttrName(attrName);
             columnEntity.setAttrname(StringUtils.uncapitalize(attrName));
-
             //列的数据类型，转换成Java类型
             String attrType = config.getString(columnEntity.getDataType(), "unknowType");
             columnEntity.setAttrType(attrType);
@@ -210,5 +209,23 @@ public class GenUtils {
             return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + className + "Mapper.xml";
         }
         return null;
+    }
+
+    /**
+     * 根据字段属性获取字段长度
+     *
+     * @param columnType
+     * @return
+     */
+    private static String getColumnLength(String columnType) {
+        String columnLength = "0";
+        try {
+            if (columnType != null) {
+                columnLength = columnType.split("\\(")[1].split("\\)")[0];
+            }
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
+        return columnLength;
     }
 }

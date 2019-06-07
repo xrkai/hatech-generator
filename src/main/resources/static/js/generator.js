@@ -16,6 +16,7 @@ $(function () {
         rownumWidth: 25,
         autowidth: true,
         multiselect: true,
+        multiboxonly:true,
         pager: "#jqGridPager",
         jsonReader: {
             root: "page.list",
@@ -31,6 +32,8 @@ $(function () {
         gridComplete: function () {
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
+            //隐藏全选按钮
+            $("#cb_jqGrid").hide();
         }
     });
 });
@@ -51,36 +54,39 @@ var vm = new Vue({
             }).trigger("reloadGrid");
         },
         generator: function () {
-            // var tableNames = getSelectedRows();
-            // var packageName = vm.q.packageName;
-            // if (tableNames == null) {
-            //     return;
-            // }
-            // if (packageName == null) {
-            //     return;
-            // }
-            // location.href = "sys/generator/code?tables=" + tableNames.join() + "&packageName=" + packageName;
-            //`this` 在方法里指向当前 Vue 实例
+            var packageName = vm.q.packageName;
+            var moduleName = vm.q.moduleName;
+            var moduleChineseName = vm.q.moduleChineseName;
+            var author = vm.q.author;
+            var email = vm.q.email;
+            var tablePrefix = vm.q.tablePrefix;
+            var tables = getSelectedRows();
+            if (tables == null) {
+                return;
+            }
+            if (!(packageName && moduleName && moduleChineseName && author && email && tablePrefix)) {
+                alert("请填写完整信息");
+                return
+            }
             var data = {
-                packageName: vm.q.packageName,
-                moduleName: vm.q.moduleName,
-                moduleChineseName: vm.q.moduleChineseName,
-                author: vm.q.author,
-                email: vm.q.email,
-                tablePrefix: vm.q.tablePrefix,
-                tables: getSelectedRows()
+                packageName: packageName,
+                moduleName: moduleName,
+                moduleChineseName: moduleChineseName,
+                author: author,
+                email: email,
+                tablePrefix: tablePrefix,
+                tables: tables
             }
             axios({
                 url: 'sys/generator/code',
                 method: 'post',
                 data: data,
                 responseType: 'blob'
-            })
-            .then(function (res) {
+            }).then(function (res) {
                 var blob = new Blob([res.data], {
                     type: res.headers["content-type"]
                 });
-                var filename = vm.q.moduleName+"-code";
+                var filename = vm.q.moduleName + "-code.zip";
                 var objectUrl = URL.createObjectURL(blob);
                 var link = document.createElement("a");
                 link.style.display = "none";
@@ -88,8 +94,7 @@ var vm = new Vue({
                 link.setAttribute("download", filename);
                 document.body.appendChild(link);
                 link.click();
-            })
-            .catch(function (error) {
+            }).catch(function (error) {
                 console.log(error);
             });
         }
