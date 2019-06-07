@@ -215,10 +215,14 @@ public class GenUtils {
      * @return
      */
     private static String getColumnLength(String columnType) {
+        // 需要确认是否columnLength只有varchar时候生效
         String columnLength = "0";
         try {
             if (columnType != null) {
                 columnLength = columnType.split("\\(")[1].split("\\)")[0];
+                if (columnLength.indexOf(",") > 0) {
+                    columnLength = "0";
+                }
             }
         } catch (Exception e) {
 //            e.printStackTrace();
