@@ -16,7 +16,7 @@ $(function () {
         rownumWidth: 25,
         autowidth: true,
         multiselect: true,
-        multiboxonly:true,
+        multiboxonly: true,
         pager: "#jqGridPager",
         jsonReader: {
             root: "page.list",
@@ -61,11 +61,23 @@ var vm = new Vue({
             var email = vm.q.email;
             var tablePrefix = vm.q.tablePrefix;
             var tables = getSelectedRows();
+            // 勾选的内容
+            var entity = vm.q.entity;
+            var mapper = vm.q.mapper;
+            var service = vm.q.service;
+            var controller = vm.q.controller;
+            // 勾选的tables不能为空
             if (tables == null) {
                 return;
             }
+            // 下列为必填项
             if (!(packageName && moduleName && moduleChineseName && author && email && tablePrefix)) {
                 alert("请填写完整信息");
+                return
+            }
+            // 至少勾选一种模块
+            if (!(entity || mapper || service || controller)) {
+                alert("至少勾选一种需要生成的模块");
                 return
             }
             var data = {
@@ -75,7 +87,11 @@ var vm = new Vue({
                 author: author,
                 email: email,
                 tablePrefix: tablePrefix,
-                tables: tables
+                tables: tables,
+                entity: entity ? entity : false,
+                mapper: mapper ? mapper : false,
+                service: service ? service : false,
+                controller: controller ? controller : false
             }
             axios({
                 url: 'sys/generator/code',

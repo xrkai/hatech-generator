@@ -34,4 +34,11 @@ public class ConfigEntity {
      */
     private String[] tables;
 
+    private boolean entity;
+
+    private boolean service;
+
+    private boolean mapper;
+
+    private boolean controller;
 }

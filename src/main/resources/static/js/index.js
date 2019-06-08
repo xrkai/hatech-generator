@@ -11,7 +11,7 @@ $(window).on('resize', function() {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
-		main:"main.html",
+		main:"generator.html",
         navTitle:"欢迎页"
 	},
     methods: {

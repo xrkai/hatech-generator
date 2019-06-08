@@ -32,14 +32,22 @@ import java.util.zip.ZipOutputStream;
  */
 public class GenUtils {
 
-    public static List<String> getTemplates() {
+    public static List<String> getTemplates(ConfigEntity configEntity) {
         List<String> templates = new ArrayList<String>();
-        templates.add("template/Entity.java.vm");
-        templates.add("template/Mapper.java.vm");
-        templates.add("template/Mapper.xml.vm");
-        templates.add("template/Service.java.vm");
-        templates.add("template/ServiceImpl.java.vm");
-        templates.add("template/Controller.java.vm");
+        if (configEntity.isEntity()) {
+            templates.add("template/Entity.java.vm");
+        }
+        if (configEntity.isMapper()) {
+            templates.add("template/Mapper.java.vm");
+            templates.add("template/Mapper.xml.vm");
+        }
+        if (configEntity.isService()) {
+            templates.add("template/Service.java.vm");
+            templates.add("template/ServiceImpl.java.vm");
+        }
+        if (configEntity.isController()) {
+            templates.add("template/Controller.java.vm");
+        }
         return templates;
     }
 
@@ -125,7 +133,7 @@ public class GenUtils {
         VelocityContext context = new VelocityContext(map);
 
         //获取模板列表
-        List<String> templates = getTemplates();
+        List<String> templates = getTemplates(configEntity);
         for (String template : templates) {
             //渲染模板
             StringWriter sw = new StringWriter();
