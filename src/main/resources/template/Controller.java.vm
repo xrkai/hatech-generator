@@ -1,16 +1,18 @@
 package ${package}.${moduleName}.controller;
 
+import ${package}.config.log.OptionLog;
 import ${package}.${moduleName}.entity.${className};
 import ${package}.${moduleName}.service.I${className}Service;
+import ${package}.${moduleName}.view.V${className};
 import cn.com.hatech.common.data.result.ResultObject;
 import cn.com.hatech.common.data.result.ResultResponse;
-import  ${package}.config.log.OptionLog;
 import cn.com.hatech.common.util.log.OptionType;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
 /**
@@ -19,7 +21,7 @@ import java.util.Map;
  * @Package:  ${package}.${moduleName}.controller
  * @ClassName: ${className}Controller
  * @Author: ${author}
- * @Description: ${moduleChineseName}控制器
+ * @Description: ${moduleChineseName}管理控制器
  * @Date: ${datetime}
  * @Version: 1.0
  */
@@ -28,22 +30,56 @@ import java.util.Map;
 @RequestMapping("${moduleName}/${pathName}")
 @Slf4j
 public class ${className}Controller {
+
     /**
-     * 系统${moduleChineseName}业务层接口
+     * @Author ${author}
+     * @Version 1.0
+     * @Description 注入${moduleChineseName}业务接口
+     * @Date 2019-1-10 1:58
      */
     @Autowired
     private I${className}Service ${classname}Service;
 
-    @ApiOperation(value = "${moduleChineseName}列表查询接口", httpMethod = "GET", notes = "查询${moduleChineseName}列表信息")
+    @ApiOperation(value = "添加/修改${moduleChineseName}信息", httpMethod = "POST", notes = "根据参数列表添加/修改${moduleChineseName}信息")
+    @ApiImplicitParams({
+        #foreach ($column in $columns)
+                @ApiImplicitParam(name = "$column.attrname", value = "$column.comments", required = true, dataType = "$column.attrType", paramType = "query"),
+        #end
+    })
+    @PostMapping("/edit")
+    @OptionLog(type = OptionType.ADD_UPDATE, description = "新增/修改${moduleChineseName}信息")
+    public ResultObject<Object> edit(@ApiParam(hidden = true) @RequestParam Map<String, Object> map) {
+
+        return this.${classname}Service.edit(map);
+
+    }
+
+    @ApiOperation(value = "删除${moduleChineseName}详细信息", httpMethod = "POST", notes = "根据${moduleChineseName}ID，删除员工详细信息（支持批量删除ID用','英文逗号隔开）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "${moduleChineseName}ID(多个用英文、号隔开)", required = true, dataType = "String", paramType = "query")
+    })
+    @PostMapping("/delete")
+    @OptionLog(type = OptionType.DELETE, description = "删除${moduleChineseName}信息")
+    public ResultObject<Object> delete(@RequestParam String id) {
+        int num = this.${classname}Service.deleteByIdArray(id);
+        if (num > 0) {
+            log.info("{}", "删除${moduleChineseName}成功");
+            return ResultResponse.success("删除${moduleChineseName}成功", id);
+        }
+        log.info("{}", "删除${moduleChineseName}失败");
+        return ResultResponse.error("删除${moduleChineseName}失败", id);
+    }
+
+    @ApiOperation(value = "查询${moduleChineseName}信息", httpMethod = "GET", notes = "根据查询条件分页查询${moduleChineseName}信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "当前页数", defaultValue = "0", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "limit", value = "每页条数", defaultValue = "10", dataType = "int", paramType = "query"),
     })
-    @GetMapping("select")
-    @OptionLog(type = OptionType.SELECT, businessType =OptionType.SELECT, description = "查询${moduleChineseName}列表信息")
-    public ResultObject<${className}> select(@ApiParam(hidden = true) @RequestParam Map<String, Object> map) {
-        PageInfo<${className}> pageInfo = this.${classname}Service.findAll(map);
-        if(pageInfo != null){
+    @GetMapping("/select")
+    @OptionLog(type = OptionType.SELECT, description = "查询${moduleChineseName}信息")
+    public ResultObject<V${className}> findAll(@ApiParam(hidden = true) @RequestParam Map<String, Object> map) {
+        PageInfo<V${className}> pageInfo = this.${classname}Service.findAll(map);
+        if (pageInfo != null) {
             log.info("{}", "查询${moduleChineseName}信息成功");
             return ResultResponse.success("查询${moduleChineseName}成功", pageInfo);
         }
@@ -51,15 +87,15 @@ public class ${className}Controller {
         return ResultResponse.error("查询${moduleChineseName}失败");
     }
 
-    @ApiOperation(value = "${moduleChineseName}查询接口", httpMethod = "GET", notes = "根据id查询${moduleChineseName}信息")
+    @ApiOperation(value = "查询${moduleChineseName}详细信息", httpMethod = "GET", notes = "根据员工ID查询${moduleChineseName}详细信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "${moduleChineseName}id", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "id", value = "${moduleChineseName}ID",required = true,dataType = "String", paramType = "query")
     })
-    @GetMapping("select/id")
-    @OptionLog(type = OptionType.SELECT, businessType = OptionType.SELECT, description = "根据id查询${moduleChineseName}信息")
+    @GetMapping("/select/id")
+    @OptionLog(type = OptionType.SELECT, description = "查询${moduleChineseName}信息")
     public ResultObject<${className}> selectById(@ApiParam(hidden = true) @RequestParam String id) {
         ${className} ${classname} = this.${classname}Service.selectById(id);
-        if(${classname} != null){
+        if (${classname} != null) {
             log.info("{}", "查询${moduleChineseName}信息成功");
             return ResultResponse.success("查询${moduleChineseName}成功", ${classname});
         }
@@ -67,35 +103,4 @@ public class ${className}Controller {
         return ResultResponse.error("查询${moduleChineseName}失败");
     }
 
-    @ApiOperation(value = "${moduleChineseName}编辑接口", httpMethod = "POST", notes = "新增/修改${moduleChineseName}信息")
-    @ApiImplicitParams({
-    #foreach ($column in $columns)
-       @ApiImplicitParam(name = "$column.attrname", value = "$column.comments", required = true, dataType = "$column.attrType", paramType = "query"),
-    #end
-    })
-    @PostMapping("edit")
-    @OptionLog(type = OptionType.UPDATE, businessType = OptionType.UPDATE, description = "编辑${moduleChineseName}信息")
-    public ResultObject<Object> edit(@ApiParam(hidden = true) @RequestBody Map<String, Object> map) {
-        int num = this.${classname}Service.edit(map);
-        if(num>0){
-            log.info("{}", "编辑${moduleChineseName}成功");
-            return  ResultResponse.success("编辑${moduleChineseName}成功");
-        }
-        log.info("{}", "编辑${moduleChineseName}失败");
-        return ResultResponse.error("编辑${moduleChineseName}失败");
-    }
-
-    @ApiOperation(value = "${moduleChineseName}删除接口", httpMethod = "POST", notes = "根据${moduleChineseName}id删除${moduleChineseName}")
-    @ApiImplicitParam(name = "ids", value = "${moduleChineseName}Id组（比如：ids=id1,id2）", required = true, dataType = "String", paramType = "query")
-    @PostMapping("delete")
-    @OptionLog(type = OptionType.DELETE, businessType = OptionType.DELETE, description = "根据${moduleChineseName}id删除${moduleChineseName}")
-    public ResultObject<String> delete(@ApiParam(hidden = true) @RequestParam String ids) {
-        int num = this.${classname}Service.delete(ids);
-        if(num > 0){
-            log.info("{}", "删除${moduleChineseName}成功");
-            return  ResultResponse.success("删除${moduleChineseName}成功", ids);
-        }
-        log.info("{}", "删除${moduleChineseName}失败");
-        return ResultResponse.error("删除${moduleChineseName}失败", ids);
-    }
 }

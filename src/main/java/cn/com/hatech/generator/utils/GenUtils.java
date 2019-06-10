@@ -47,6 +47,7 @@ public class GenUtils {
         }
         if (configEntity.isController()) {
             templates.add("template/Controller.java.vm");
+            templates.add("template/View.java.vm");
         }
         return templates;
     }
@@ -193,7 +194,9 @@ public class GenUtils {
         if (template.contains("Entity.java.vm")) {
             return packagePath + "entity" + File.separator + className + ".java";
         }
-
+        if (template.contains("View.java.vm")) {
+            return packagePath + "view" + File.separator + "V" + className + ".java";
+        }
         if (template.contains("Mapper.java.vm")) {
             return packagePath + "mapper" + File.separator + "I" + className + "Mapper.java";
         }
@@ -209,7 +212,6 @@ public class GenUtils {
         if (template.contains("Controller.java.vm")) {
             return packagePath + "controller" + File.separator + className + "Controller.java";
         }
-
         if (template.contains("Mapper.xml.vm")) {
             return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + className + "Mapper.xml";
         }

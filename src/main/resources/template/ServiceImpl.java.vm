@@ -3,17 +3,20 @@ package ${package}.${moduleName}.service.impl;
 import  ${package}.${moduleName}.entity.${className};
 import  ${package}.${moduleName}.mapper.I${className}Mapper;
 import  ${package}.${moduleName}.service.I${className}Service;
+import  ${package}.${moduleName}.view.V${className};
 import cn.com.hatech.common.data.page.MybatisPage;
+import cn.com.hatech.common.data.result.ResultObject;
+import cn.com.hatech.common.data.result.ResultResponse;
 import cn.com.hatech.common.data.universal.AbstractService;
+import cn.com.hatech.common.util.stringutils.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 /**
  * @Copyright (C), 2018,北京同创永益科技发展有限公司
@@ -30,72 +33,109 @@ import java.util.Map;
 public class ${className}ServiceImpl extends AbstractService<${className}> implements I${className}Service {
 
     /**
-    * ${moduleChineseName}数据层实现接口
-    */
+     * @Author ${author}
+     * @Version 1.0
+     * @Description 注入${moduleChineseName}数据库接口
+     * @Date 2019/6/3 20:56
+     */
     @Autowired
     private I${className}Mapper ${classname}Mapper;
 
     /**
-     * 分页查询${moduleChineseName}列表信息
-     *
+     * 根据参数分页查询${moduleChineseName}信息
      * @param map
      * @return
      */
     @Override
-    public PageInfo<${className}> findAll(Map<String, Object> map) {
+    public PageInfo<V${className}> findAll(Map<String, Object> map) {
         MybatisPage.getPageSize(map);
         PageHelper.startPage(MybatisPage.page, MybatisPage.limit);
-        List<${className}> ${classname}InfoList = this.${classname}Mapper.findAll(map);
+        List<V${className}> ${classname}InfoList = this.${classname}Mapper.findAll(map);
         log.info("{}", ${classname}InfoList);
         return new PageInfo<>(${classname}InfoList);
     }
 
     /**
-     * 根据map信息新增或修改${moduleChineseName}
-     *
-     * @param map
-     * @return
-     */
+    * @param id 多个${moduleChineseName}ID用英文,号隔开
+    * @Method deleteByIds
+    * @Author ${author}
+    * @Version 1.0
+    * @Description 根据${moduleChineseName}Id, 批量逻辑删除
+    * @Return java.lang.Integer
+    * @Exception
+    * @Date 2019/6/4 10:28
+    */
     @Override
-    public int edit(Map<String, Object> map) {
-        ${className} ${classname} = JSON.parseObject(JSON.toJSONString(map), ${className}.class);
+    public Integer deleteByIdArray(String id) {
+        String[] ids = id.split(",");
+        return ${classname}Mapper.deleteByIdArray(ids);
+    }
+
+    /**
+    * @param map
+    * @Method edit
+    * @Author ${author}
+    * @Version 1.0
+    * @Description 根据参数新增/更新${moduleChineseName}信息
+    * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
+    * @Exception
+    * @Date 2019/6/5 14:11
+    */
+    @Override
+    public ResultObject<Object> edit(Map<String, Object> map) {
+
+        ${className} ${classname}  = JSON.parseObject(JSON.toJSONString(map), ${className}.class);
+        String id =  ${classname}.getId();
         // 判断id是否存在，如果不存在 则添加，否则修改
-        if (StringUtils.isEmpty(map.get("id"))) {
-            return this.add${className}(${classname});
+        if (StringUtils.isEmpty(id)) {
+            return insertMethod( ${classname});
         } else {
-            return this.update${className}(${classname});
+            return updateMethod( ${classname});
+
         }
+
     }
 
     /**
-     * 根据id批量删除${moduleChineseName}信息
-     *
-     * @param ids
-     * @return
-     */
-    @Override
-    public int delete(String ids) {
-        return this.${classname}Mapper.deleteByIds(ids);
+      * @param ${classname}
+      * @Method insert
+      * @Author ${author}
+      * @Version 1.0
+      * @Description 根据传入参数添加${moduleChineseName}信息
+      * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
+      * @Exception
+      * @Date 2019/6/4 14:29
+      */
+    private ResultObject<Object> insertMethod(${className} ${classname}) {
+
+        int num = ${classname}Mapper.insert(${classname});
+        if (num > 0) {
+            log.info("{}", "添加{moduleChineseName}信息成功");
+            return ResultResponse.success("添加{moduleChineseName}成功", ${classname});
+        }
+        log.info("{}", "添加{moduleChineseName}信息失败");
+        return ResultResponse.error("添加{moduleChineseName}失败");
     }
 
     /**
-     * 新增${moduleChineseName}
-     *
      * @param ${classname}
-     * @return
+     * @Method update
+     * @Author ${author}
+     * @Version 1.0
+     * @Description 根据传入ID参数更新${moduleChineseName}信息
+     * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
+     * @Exception
+     * @Date 2019/6/4 14:30
      */
-    private int add${className}(${className} ${classname}) {
-        return this.${classname}Mapper.insert(${classname});
-    }
+    private ResultObject<Object> updateMethod(${className} ${classname}) {
 
-    /**
-     * 修改${moduleChineseName}
-     *
-     * @param ${classname}
-     * @return
-     */
-    private int update${className}(${className} ${classname}) {
-        return this.${classname}Mapper.updateByPrimaryKey(${classname});
+        int num = ${classname}Mapper.updateByPrimaryKeySelective(${classname});
+        if (num > 0) {
+            log.info("{}", "修改${moduleChineseName}成功");
+            return ResultResponse.success("修改${moduleChineseName}成功", ${classname});
+        }
+        log.info("{}", "修改${moduleChineseName}失败");
+        return ResultResponse.error("修改${moduleChineseName}失败", ${classname});
     }
 
 }

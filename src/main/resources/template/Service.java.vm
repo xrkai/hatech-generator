@@ -1,7 +1,9 @@
 package ${package}.${moduleName}.service;
 
 import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.view.V${className};
 import cn.com.hatech.common.data.universal.IBaseService;
+import cn.com.hatech.common.data.result.ResultObject;
 import com.github.pagehelper.PageInfo;
 import java.util.Map;
 
@@ -11,33 +13,32 @@ import java.util.Map;
  * @Package:  ${package}.${moduleName}.service
  * @ClassName: I${className}Service
  * @Author: ${author}
- * @Description: ${moduleChineseName}业务接口
+ * @Description: ${moduleChineseName}业务接口层
  * @Date: ${datetime}
  * @Version: 1.0
  */
 public interface I${className}Service extends IBaseService<${className}> {
+
     /**
     * 根据条件分页查询${moduleChineseName}信息
-    *
     * @param map
     * @return
     */
-    PageInfo<${className}> findAll(Map<String, Object> map);
+    PageInfo<V${className}> findAll(Map<String, Object> map);
 
     /**
-     * 编辑${moduleChineseName}信息
-     *
+     * 根据${moduleChineseName}id批量删除${moduleChineseName}信息
+     * @param id 多个${moduleChineseName}ID用英文，号隔开
+     * @return
+     */
+    Integer deleteByIdArray(String id);
+
+    /**
+     * 根据参数新增/更新${moduleChineseName}信息
      * @param map
      * @return
      */
-    int edit(Map<String, Object> map);
+    ResultObject<Object> edit(Map<String, Object> map);
 
-    /**
-     * 根据ids批量删除${moduleChineseName}信息
-     *
-     * @param ids
-     * @return
-     */
-    int delete(String ids);
 }
 

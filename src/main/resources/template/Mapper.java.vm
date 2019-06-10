@@ -1,7 +1,10 @@
 package ${package}.${moduleName}.mapper;
 
 import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.view.V${className};
 import cn.com.hatech.common.data.universal.IBaseMapper;
+import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,13 @@ public interface I${className}Mapper extends IBaseMapper<${className}> {
      * @param map
      * @return
      */
-    List<${className}> findAll(Map<String, Object> map);
+    List<V${className}> findAll(Map<String, Object> map);
 
+
+    /**
+     * 逻辑删除${moduleChineseName}信息
+     * @param ids 根据${moduleChineseName}ID批量逻辑删除${moduleChineseName}信息
+     * @return
+     */
+    int deleteByIdArray(@Param("ids") String[] ids);
 }

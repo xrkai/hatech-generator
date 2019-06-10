@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${package}.${moduleName}.mapper.I${className}Mapper">
 
-    <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap id="${className}Map" type="${package}.${moduleName}.entity.${className}" >
+
+    <resultMap id="${className}Map" type="${package}.${moduleName}.view.V${className}" >
         #foreach($column in $columns)
             <result column="${column.columnName}" jdbcType="${column.dataType}" property="${column.attrname}" />
         #end
 </resultMap>
 
-    <!-- 查询所有信息 -->
+    <!-- 查询${moduleChineseName}所有信息 -->
     <select id="findAll"  resultMap="${className}Map">
         select
     #foreach($column in $columns)
@@ -28,5 +28,19 @@
             </otherwise>
         </choose>
     </select>
+
+    <!-- 逻辑删除${moduleChineseName}信息 -->
+    <update id="deleteByIdArray">
+        update
+        ${tableName}
+        set
+        state=1
+        where
+        id
+        in
+        <foreach collection="ids" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </update>
 
 </mapper>
