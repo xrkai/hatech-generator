@@ -35,7 +35,7 @@ public class ${className}Controller {
      * @Author ${author}
      * @Version 1.0
      * @Description 注入${moduleChineseName}业务接口
-     * @Date 2019-1-10 1:58
+     * @Date ${datetime}
      */
     @Autowired
     private I${className}Service ${classname}Service;

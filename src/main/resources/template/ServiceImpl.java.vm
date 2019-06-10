@@ -36,7 +36,7 @@ public class ${className}ServiceImpl extends AbstractService<${className}> imple
      * @Author ${author}
      * @Version 1.0
      * @Description 注入${moduleChineseName}数据库接口
-     * @Date 2019/6/3 20:56
+     * @Date ${datetime}
      */
     @Autowired
     private I${className}Mapper ${classname}Mapper;
@@ -63,7 +63,7 @@ public class ${className}ServiceImpl extends AbstractService<${className}> imple
     * @Description 根据${moduleChineseName}Id, 批量逻辑删除
     * @Return java.lang.Integer
     * @Exception
-    * @Date 2019/6/4 10:28
+    * @Date ${datetime}
     */
     @Override
     public Integer deleteByIdArray(String id) {
@@ -79,7 +79,7 @@ public class ${className}ServiceImpl extends AbstractService<${className}> imple
     * @Description 根据参数新增/更新${moduleChineseName}信息
     * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
     * @Exception
-    * @Date 2019/6/5 14:11
+    * @Date ${datetime}
     */
     @Override
     public ResultObject<Object> edit(Map<String, Object> map) {
@@ -104,7 +104,7 @@ public class ${className}ServiceImpl extends AbstractService<${className}> imple
       * @Description 根据传入参数添加${moduleChineseName}信息
       * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
       * @Exception
-      * @Date 2019/6/4 14:29
+      * @Date ${datetime}
       */
     private ResultObject<Object> insertMethod(${className} ${classname}) {
 
@@ -125,7 +125,7 @@ public class ${className}ServiceImpl extends AbstractService<${className}> imple
      * @Description 根据传入ID参数更新${moduleChineseName}信息
      * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
      * @Exception
-     * @Date 2019/6/4 14:30
+     * @Date ${datetime}
      */
     private ResultObject<Object> updateMethod(${className} ${classname}) {
 
