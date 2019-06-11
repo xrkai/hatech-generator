@@ -5,8 +5,6 @@ import  ${package}.${moduleName}.mapper.I${className}Mapper;
 import  ${package}.${moduleName}.service.I${className}Service;
 import  ${package}.${moduleName}.view.V${className};
 import cn.com.hatech.common.data.page.MybatisPage;
-import cn.com.hatech.common.data.result.ResultObject;
-import cn.com.hatech.common.data.result.ResultResponse;
 import cn.com.hatech.common.data.universal.AbstractService;
 import cn.com.hatech.common.util.stringutils.StringUtils;
 import com.alibaba.fastjson.JSON;
@@ -15,6 +13,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Map;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import java.util.List;
  * @Date: ${datetime}
  * @Version: 1.0
  */
-@Service("${classname}Service")
+@Service("${classname}Service" )
 @Slf4j
 public class ${className}ServiceImpl extends AbstractService<${className}> implements I${className}Service {
 
@@ -51,91 +50,24 @@ public class ${className}ServiceImpl extends AbstractService<${className}> imple
         MybatisPage.getPageSize(map);
         PageHelper.startPage(MybatisPage.page, MybatisPage.limit);
         List<V${className}> ${classname}InfoList = this.${classname}Mapper.findAll(map);
-        log.info("{}", ${classname}InfoList);
+        log.info("{}" , ${classname}InfoList);
         return new PageInfo<>(${classname}InfoList);
     }
 
     /**
-    * @param id 多个${moduleChineseName}ID用英文,号隔开
-    * @Method deleteByIds
-    * @Author ${author}
-    * @Version 1.0
-    * @Description 根据${moduleChineseName}Id, 批量逻辑删除
-    * @Return java.lang.Integer
-    * @Exception
-    * @Date ${datetime}
-    */
-    @Override
-    public Integer deleteByIdArray(String id) {
-        String[] ids = id.split(",");
-        return ${classname}Mapper.deleteByIdArray(ids);
-    }
-
-    /**
-    * @param map
-    * @Method edit
-    * @Author ${author}
-    * @Version 1.0
-    * @Description 根据参数新增/更新${moduleChineseName}信息
-    * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
-    * @Exception
-    * @Date ${datetime}
-    */
-    @Override
-    public ResultObject<Object> edit(Map<String, Object> map) {
-
-        ${className} ${classname}  = JSON.parseObject(JSON.toJSONString(map), ${className}.class);
-        String id =  ${classname}.getId();
-        // 判断id是否存在，如果不存在 则添加，否则修改
-        if (StringUtils.isEmpty(id)) {
-            return insertMethod( ${classname});
-        } else {
-            return updateMethod( ${classname});
-
-        }
-
-    }
-
-    /**
-      * @param ${classname}
-      * @Method insert
-      * @Author ${author}
-      * @Version 1.0
-      * @Description 根据传入参数添加${moduleChineseName}信息
-      * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
-      * @Exception
-      * @Date ${datetime}
-      */
-    private ResultObject<Object> insertMethod(${className} ${classname}) {
-
-        int num = ${classname}Mapper.insert(${classname});
-        if (num > 0) {
-            log.info("{}", "添加{moduleChineseName}信息成功");
-            return ResultResponse.success("添加{moduleChineseName}成功", ${classname});
-        }
-        log.info("{}", "添加{moduleChineseName}信息失败");
-        return ResultResponse.error("添加{moduleChineseName}失败");
-    }
-
-    /**
-     * @param ${classname}
-     * @Method update
+     * @param id 多个${moduleChineseName}ID用英文,号隔开
+     * @Method deleteByIds
      * @Author ${author}
      * @Version 1.0
-     * @Description 根据传入ID参数更新${moduleChineseName}信息
-     * @Return cn.com.hatech.common.data.result.ResultObject<java.lang.Object>
+     * @Description 根据${moduleChineseName}Id, 批量逻辑删除
+     * @Return java.lang.Integer
      * @Exception
      * @Date ${datetime}
      */
-    private ResultObject<Object> updateMethod(${className} ${classname}) {
-
-        int num = ${classname}Mapper.updateByPrimaryKeySelective(${classname});
-        if (num > 0) {
-            log.info("{}", "修改${moduleChineseName}成功");
-            return ResultResponse.success("修改${moduleChineseName}成功", ${classname});
-        }
-        log.info("{}", "修改${moduleChineseName}失败");
-        return ResultResponse.error("修改${moduleChineseName}失败", ${classname});
+    @Override
+    public Integer deleteByIdArray(String id) {
+        String[] ids = id.split("," );
+        return ${classname}Mapper.deleteByIdArray(ids);
     }
 
 }

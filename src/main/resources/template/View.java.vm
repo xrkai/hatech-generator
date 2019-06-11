@@ -24,16 +24,16 @@ import java.util.Date;
 public class V${className} {
 
 
-#foreach ($column in $columns)
-/**
-	 * $column.comments
-	 */
-	#if($column.columnName == $pk.columnName)
+    #foreach ($column in $columns)
+  /**
+    * $column.comments
+    */
+    #if($column.columnName == $pk.columnName)
 @Id // 必须：ID唯一标识
-	#elseif($column.attrType == "Date")
+    #elseif($column.attrType == "Date")
 @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	#end
-	private $column.attrType $column.attrname;
-	#end
+    #end
+private $column.attrType $column.attrname;
+#end
 
 }

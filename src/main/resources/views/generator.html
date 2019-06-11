@@ -27,13 +27,13 @@
         <a class="btn btn-default" @click="query">查询</a>
         <hr>
         <div class="form-group col-sm-2">
-            <input type="text" class="form-control" v-model="q.packageName" placeholder="包路径">
+            <input type="text" class="form-control" v-model="q.packageName" placeholder="包路径（例：cn.com.hatech.app.xxx）">
         </div>
         <div class="form-group col-sm-2">
-            <input type="text" class="form-control" v-model="q.moduleName" placeholder="模块名">
+            <input type="text" class="form-control" v-model="q.moduleName" placeholder="模块名（例：drill）">
         </div>
         <div class="form-group col-sm-2">
-            <input type="text" class="form-control" v-model="q.moduleChineseName" placeholder="模块中文名">
+            <input type="text" class="form-control" v-model="q.moduleChineseName" placeholder="模块中文名（例：演练管理）">
         </div>
         <div class="form-group col-sm-2">
             <input type="text" class="form-control" v-model="q.author" placeholder="作者名">
@@ -42,7 +42,7 @@
             <input type="text" class="form-control" v-model="q.email" placeholder="email">
         </div>
         <div class="form-group col-sm-2">
-            <input type="text" class="form-control" v-model="q.tablePrefix" placeholder="表前缀">
+            <input type="text" class="form-control" v-model="q.tablePrefix" placeholder="表前缀（数据库表名没有前缀的可不填）">
         </div>
         <div class="form-group col-sm-4">
             <input type="checkbox" v-model="q.entity">

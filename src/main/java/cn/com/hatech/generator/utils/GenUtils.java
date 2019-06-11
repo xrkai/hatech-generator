@@ -112,6 +112,10 @@ public class GenUtils {
         map.put("className", tableEntity.getClassName());
         map.put("classname", tableEntity.getClassname());
         map.put("pathName", tableEntity.getClassname().toLowerCase());
+        //------------------------------------------------------------------
+        String[] split = configEntity.getPackageName().split("\\." );
+        map.put("projectName",split[split.length-1]);
+        //------------------------------------------------------------------
         List<ColumnEntity> columnsList = tableEntity.getColumns();
         for (ColumnEntity ColumnEntity : columnsList) {
             String DataType = ColumnEntity.getDataType();
