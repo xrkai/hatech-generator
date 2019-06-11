@@ -71,7 +71,7 @@ var vm = new Vue({
                 return;
             }
             // 下列为必填项
-            if (!(packageName && moduleName && moduleChineseName && author && email && tablePrefix)) {
+            if (!(packageName && moduleName && moduleChineseName && author && email)) {
                 alert("请填写完整信息");
                 return
             }
