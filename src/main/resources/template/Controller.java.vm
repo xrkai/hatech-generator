@@ -49,7 +49,7 @@ public class ${className}Controller {
     })
     @PostMapping("/edit")
     @OptionLog(type = OptionType.ADD_UPDATE, businessType = OptionType.OPERATION, description = "新增/修改${moduleChineseName}信息" )
-    public ResultObject<Object> edit(@ApiParam(hidden = true) @RequestParam Map<String, Object> map) {
+    public ResultObject<Object> edit(@ApiParam(hidden = true) @RequestBody Map<String, Object> map) {
         ${className} ${classname} = JSON.parseObject(JSON.toJSONString(map), ${className}.class);
         String id = ${classname}.getId();
         if (StringUtils.isEmpty(id)) {
